@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">HomeWorkRecyclerView</string>
+    <string name="just_example">just_example</string>
+    <string name="name">Name: %1$s</string>
+    <string name="slug">Slug: %1$s</string>
+    <string name="powerstats">Powerstats:</string>
+    <string name="powerstatsinit">
+        - intelligence: %1$s;\n
+        - strength: %2$s;\n
+        - speed: %3$s;\n
+        - durability: %4$s;</string>
+    <string name="biography">Biography:\n
+        - fullName: %1$s;\n
+        - alterEgos: %2$s;\n
+        - aliases: %3$s;\n
+        - placeOfBirth: %4$s;\n
+        - firstAppearance: %5$s;\n
+        - publisher: %6$s;\n
+        - alignment: %7$s;</string>
+    <string name="gender">Gender: %1$s</string>
+    <string name="race">Race: %1$s</string>
+</resources>
