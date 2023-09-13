@@ -3,11 +3,14 @@ package com.example.homeworkrecyclerview
 import android.app.Activity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.homeworkrecyclerview.databinding.ActivityMainBinding
 import com.google.gson.annotations.SerializedName
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import java.util.Collections
 
 class MainActivity : Activity() {
 
@@ -17,12 +20,44 @@ class MainActivity : Activity() {
         setContentView(binding.root)
 
         val api = ApiClient.client.create(ApiInterface::class.java)
+        val adapter = MyAdapter()
+        binding.recyclerView.adapter = adapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+
+        val itemTouchHelper = ItemTouchHelper(object :ItemTouchHelper.Callback(){
+            override fun getMovementFlags(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder
+            ): Int = makeMovementFlags(ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.END)
+
+            override fun onMove(
+                recyclerView: RecyclerView,
+                startViewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                val fromIndex = startViewHolder.adapterPosition
+                val toIndex = target.adapterPosition
+                Collections.swap(adapter.items, fromIndex, toIndex)
+                adapter.notifyItemMoved(fromIndex, toIndex)
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                if(direction == ItemTouchHelper.END) {
+                    adapter.items.removeAt(viewHolder.adapterPosition)
+                    adapter.notifyItemRemoved(viewHolder.adapterPosition)
+                }
+            }
+        })
+
+        itemTouchHelper.attachToRecyclerView(binding.recyclerView)
+
         api.getSuperHero()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                val adapter = MyAdapter(it)
-                binding.recyclerView.adapter = adapter
+                adapter.items = it
+                adapter.notifyDataSetChanged()
             },
                 {
                     Toast.makeText(this, "Error", Toast.LENGTH_LONG).show()

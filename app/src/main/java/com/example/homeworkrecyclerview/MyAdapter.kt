@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.bumptech.glide.Glide
 import com.example.homeworkrecyclerview.databinding.ItemBinding
 
-class MyAdapter(private val items: List<Superhero>) : Adapter<MyViewHolder>() {
+class MyAdapter(var items: MutableList<Superhero> = mutableListOf()) : Adapter<MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         return MyViewHolder(
